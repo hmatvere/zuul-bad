@@ -12,13 +12,13 @@
  * @author  Michael Kölling and David J. Barnes
  * @version 2011.07.31
  */
+import java.util.HashMap;
+
+
 public class Room 
 {
-    public String description;
-    public Room northExit;
-    public Room southExit;
-    public Room eastExit;
-    public Room westExit;
+    private String description;
+    private HashMap<String, Room> exits;
 
     /**
      * Create a room described "description". Initially, it has
@@ -29,26 +29,49 @@ public class Room
     public Room(String description) 
     {
         this.description = description;
+        exits = new HashMap<>();
     }
 
     /**
-     * Define the exits of this room.  Every direction either leads
-     * to another room or is null (no exit there).
-     * @param north The north exit.
-     * @param east The east east.
-     * @param south The south exit.
-     * @param west The west exit.
+     * Define the exit from this room.
+     * @param String direction The direction of the exit
+     * @param Room neighbor The room in the given direction
      */
-    public void setExits(Room north, Room east, Room south, Room west) 
-    {
-        if(north != null)
-            northExit = north;
-        if(east != null)
-            eastExit = east;
-        if(south != null)
-            southExit = south;
-        if(west != null)
-            westExit = west;
+    public void setExit(String direction, Room neighbor) {
+        exits.put(direction, neighbor);
+    }
+
+    /**
+     * @param direction
+     * @return The exit object(Room) reference
+     */
+    public Room getExit(String direction){
+        return exits.get(direction);
+    }
+    /**
+     * Return a description of the room's exits,
+     * for example, "Exits: north west".
+     * @return A description of the available exits.
+     */
+    public String getExitString(){
+        String directions = "";
+        if(getExit("north") != null)
+        {
+            directions += "north ";
+        }
+        if(getExit("east") != null)
+        {
+            directions += "east ";
+        }
+        if(getExit("south") != null)
+        {
+            directions += "south ";
+        }
+        if(getExit("west") != null)
+        {
+            directions += "west ";
+        }
+        return directions;
     }
 
     /**

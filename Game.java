@@ -34,23 +34,43 @@ public class Game
      */
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office;
+        Room closet, mainCorridor, mainCorridor2, closet2, toilet, cleanRoom, bossOffice, corridor, storageRoom,
+                outside;
       
         // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theater = new Room("in a lecture theater");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
+        closet = new Room("in the closet");
+        mainCorridor = new Room("in the main corridor");
+        mainCorridor2 = new Room("still in the main corridor");
+        toilet = new Room("in the toilets");
+        cleanRoom = new Room("in the clean room");
+        bossOffice = new Room("in the boss' office");
+        corridor = new Room("in a corridor");
+        storageRoom = new Room("in the storage room");
+        outside = new Room("outside, the grass is blue");
+
+
         
         // initialise room exits
-        outside.setExits(null, theater, lab, pub);
-        theater.setExits(null, null, null, outside);
-        pub.setExits(null, outside, null, null);
-        lab.setExits(outside, office, null, null);
-        office.setExits(null, null, null, lab);
+        closet.setExit("west",mainCorridor);
+        mainCorridor.setExit("north", bossOffice);
+        mainCorridor.setExit("east", closet);
+        mainCorridor.setExit("south", mainCorridor2);
+        mainCorridor2.setExit("north", mainCorridor);
+        mainCorridor2.setExit("east", cleanRoom);
+        mainCorridor2.setExit("west", toilet);
+        toilet.setExit("east", mainCorridor2);
+        cleanRoom.setExit("west",mainCorridor2);
+        bossOffice.setExit("south", mainCorridor);
+        bossOffice.setExit("west", corridor);
+        corridor.setExit("north", storageRoom);
+        corridor.setExit("east", bossOffice);
+        storageRoom.setExit("north",outside);
+        storageRoom.setExit("south",corridor);
+        outside.setExit("south", storageRoom);
 
-        currentRoom = outside;  // start game outside
+
+
+        currentRoom = bossOffice;  // start game in boss' office
     }
 
     /**
@@ -142,23 +162,9 @@ public class Game
             return;
         }
 
-        String direction = command.getSecondWord();
-
         // Try to leave current room.
-        Room nextRoom = null;
-        if(direction.equals("north")) {
-            nextRoom = currentRoom.northExit;
-        }
-        if(direction.equals("east")) {
-            nextRoom = currentRoom.eastExit;
-        }
-        if(direction.equals("south")) {
-            nextRoom = currentRoom.southExit;
-        }
-        if(direction.equals("west")) {
-            nextRoom = currentRoom.westExit;
-        }
-
+        String direction = command.getSecondWord();
+        Room nextRoom = currentRoom.getExit(direction);
         if (nextRoom == null) {
             System.out.println("There is no door!");
         }
@@ -169,19 +175,9 @@ public class Game
             printLocationInfo();
         }
     }
+    //getExitString()
     private void printLocationInfo(){
-        if(currentRoom.northExit != null) {
-            System.out.print("north ");
-        }
-        if(currentRoom.eastExit != null) {
-            System.out.print("east ");
-        }
-        if(currentRoom.southExit != null) {
-            System.out.print("south ");
-        }
-        if(currentRoom.westExit != null) {
-            System.out.print("west ");
-        }
+        System.out.println(currentRoom.getExitString());
         System.out.println();
     }
 
