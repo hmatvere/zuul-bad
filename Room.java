@@ -1,18 +1,19 @@
 /**
  * Class Room - a room in an adventure game.
  *
- * This class is part of the "World of Zuul" application. 
- * "World of Zuul" is a very simple, text based adventure game.  
+ * This class is part of the "World of Zuul" application.
+ * "World of Zuul" is a very simple, text based adventure game.
  *
- * A "Room" represents one location in the scenery of the game.  It is 
- * connected to other rooms via exits.  The exits are labelled north, 
+ * A "Room" represents one location in the scenery of the game.  It is
+ * connected to other rooms via exits.  The exits are labelled north,
  * east, south, west.  For each direction, the room stores a reference
  * to the neighboring room, or null if there is no exit in that direction.
- * 
+ *
  * @author  Michael Kölling and David J. Barnes
  * @version 2011.07.31
  */
 import java.util.HashMap;
+import java.util.Set;
 
 
 public class Room 
@@ -42,7 +43,7 @@ public class Room
     }
 
     /**
-     * @param direction
+     * @param String direction where the Room is located
      * @return The exit object(Room) reference
      */
     public Room getExit(String direction){
@@ -54,24 +55,12 @@ public class Room
      * @return A description of the available exits.
      */
     public String getExitString(){
-        String directions = "";
-        if(getExit("north") != null)
-        {
-            directions += "north ";
+        String returnString = "Exits: ";
+        Set<String>keys = exits.keySet();
+        for(String exit : keys){
+            returnString += " " + exit;
         }
-        if(getExit("east") != null)
-        {
-            directions += "east ";
-        }
-        if(getExit("south") != null)
-        {
-            directions += "south ";
-        }
-        if(getExit("west") != null)
-        {
-            directions += "west ";
-        }
-        return directions;
+        return returnString;
     }
 
     /**
@@ -80,6 +69,13 @@ public class Room
     public String getDescription()
     {
         return description;
+    }
+
+    /**
+     * @return A long description of the room, including exits
+     */
+    public String getLongDescription(){
+        return "You are " + description + ".\n" + getExitString();
     }
 
 }
