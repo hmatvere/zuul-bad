@@ -20,6 +20,7 @@ public class Game
 {
     private Parser parser;
     private Room currentRoom;
+    private CommandWords commandWords;
     Random r;
         
     /**
@@ -28,6 +29,7 @@ public class Game
     public Game() 
     {
         r = new Random();
+        commandWords = new CommandWords();
         createRooms();
         parser = new Parser();
     }
@@ -137,6 +139,9 @@ public class Game
         else if(commandWord.equals("rest")){
             rest();
         }
+        else if(commandWord.equals("eat")){
+            eat();
+        }
 
         return wantToQuit;
     }
@@ -150,17 +155,18 @@ public class Game
      */
     private void printHelp() 
     {
-        System.out.println("You are lost. You are alone. You wander");
-        System.out.println("around at the university.");
+        System.out.println("You are lost. You are alone. You wander.");
         System.out.println();
         System.out.println("Your command words are:");
-        System.out.println("   go quit help look rest");
+        System.out.println(parser.showCommands()); //method in CommandWords
     }
 
     private void rest(){
-        //rng
         int x = r.nextInt(4)+1;
         System.out.println("You rested for " + x + " hours.");
+    }
+    private void eat(){
+        System.out.println("You just ate an apple pie");
     }
 
     /** 
